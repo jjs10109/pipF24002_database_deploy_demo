@@ -1,0 +1,7 @@
+id,day_part,time_of_day
+1,weekday,morning
+2,weekday,afternoon
+3,weekday,evening
+4,weekend,morning
+5,weekend,afternoon
+6,weekend,evening

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Class names</title>
+  <style>
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      max-width: 36rem;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 3rem;
+      color: #1c1917;
+      background: #faf7f2;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: normal;
+      margin-bottom: 0.25rem;
+    }
+    p {
+      color: #57534e;
+      margin-top: 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0 0;
+      border-top: 1px solid #e7e0d6;
+    }
+    li {
+      padding: 0.7rem 0;
+      border-bottom: 1px solid #e7e0d6;
+    }
+    .empty {
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Class names</h1>
+  <p>{{ names|length }} name{{ "s" if names|length != 1 else "" }} from the class dataset.</p>
+  {% if names %}
+  <ul>
+    {% for name in names %}
+    <li>{{ name }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">No class names are in the database yet.</p>
+  {% endif %}
+</body>
+</html>
