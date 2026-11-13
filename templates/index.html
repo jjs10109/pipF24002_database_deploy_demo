@@ -3,51 +3,289 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Class names</title>
+  <title>Project groups</title>
   <style>
     body {
+      margin: 0;
       font-family: Georgia, "Times New Roman", serif;
-      max-width: 36rem;
-      margin: 2.5rem auto;
-      padding: 0 1.25rem 3rem;
       color: #1c1917;
       background: #faf7f2;
     }
-    h1 {
+
+    .page {
+      max-width: 36rem;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 3rem;
+    }
+    .page h1 {
       font-size: 2rem;
       font-weight: normal;
       margin-bottom: 0.25rem;
     }
-    p {
+    .page h2 {
+      font-size: 1.35rem;
+      font-weight: normal;
+      margin: 2rem 0 0.2rem;
+    }
+    .page p {
       color: #57534e;
       margin-top: 0;
     }
-    ul {
+    .page ul {
       list-style: none;
       padding: 0;
-      margin: 1.5rem 0 0;
+      margin: 0.4rem 0 0;
       border-top: 1px solid #e7e0d6;
     }
-    li {
+    .page li {
       padding: 0.7rem 0;
       border-bottom: 1px solid #e7e0d6;
+    }
+    .cluster {
+      color: #78716c;
+    }
+    .summary {
+      margin-top: 2rem;
     }
     .empty {
       font-style: italic;
     }
+
+    .board {
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e4dcd0;
+      --card: #fffdf9;
+      --missing: #9a3412;
+      --missing-bg: #f8ebe3;
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+      line-height: 1.45;
+    }
+    .board header h1 {
+      margin: 0;
+      font-size: 2.25rem;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+    }
+    .board header > p {
+      margin: 0.4rem 0 0;
+      color: var(--muted);
+    }
+    .board .kinds {
+      margin: 1.25rem 0 0;
+      padding: 0.9rem 1rem;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .board .kinds p {
+      margin: 0;
+    }
+    .board .kinds ul {
+      margin: 0.35rem 0 0;
+      padding-left: 1.15rem;
+    }
+    .board .overview {
+      margin: 1.25rem 0 0.75rem;
+    }
+    .board .groups {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .board article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 0.75rem 0.8rem 0.85rem;
+    }
+    .board article.missing {
+      background: var(--missing-bg);
+      border-color: #efd3c4;
+    }
+    .board article h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .board .count {
+      margin: 0.1rem 0 0.55rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .board .mix {
+      margin: 0.55rem 0 0;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+    .board .mix .zero {
+      color: var(--missing);
+    }
+    .board .members {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+    .board .members li {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    @media (min-width: 64rem) {
+      .board .groups { grid-template-columns: repeat(4, 1fr); }
+    }
   </style>
 </head>
 <body>
-  <h1>Class names</h1>
-  <p>{{ names|length }} name{{ "s" if names|length != 1 else "" }} from the class dataset.</p>
-  {% if names %}
-  <ul>
-    {% for name in names %}
-    <li>{{ name }}</li>
+  <div class="page">
+    <h1>Project groups</h1>
+    {% if student_count %}
+    <p>{{ student_count }} student{{ "s" if student_count != 1 else "" }} from the class dataset.</p>
+    {% for group in groups %}
+    <section>
+      <h2>Group {{ group.number }}</h2>
+      <p>
+        {{ group.count }} student{{ "s" if group.count != 1 else "" }}.
+        {% for item in group.cluster_counts %}
+        Cluster {{ item.cluster }}: {{ item.count }}.
+        {% endfor %}
+      </p>
+      {% if group.members %}
+      <ul>
+        {% for member in group.members %}
+        <li>{{ member.name }} <span class="cluster">cluster {{ member.cluster }}</span></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </section>
     {% endfor %}
-  </ul>
-  {% else %}
-  <p class="empty">No class names are in the database yet.</p>
-  {% endif %}
+    <p class="summary">Groups missing a cluster: {{ missing_groups }}. A group is missing a cluster when any cluster in the class has no students in that group.</p>
+    {% else %}
+    <p class="empty">No class names are in the database yet.</p>
+    {% endif %}
+  </div>
+
+  <section class="board" id="group-board">
+    <header>
+      <h1>Project groups</h1>
+      <p>Names sit with a group number. The mix says how many people of each kind landed in that group, not which person is which.</p>
+    </header>
+    <section class="kinds" id="kinds" hidden>
+      <p>Three kinds, from the four skill ratings (programming, data and stats, frontend design, business pitch):</p>
+      <ul id="kind-list"></ul>
+    </section>
+    <p class="overview" id="overview"></p>
+    <div class="groups" id="group-cards"></div>
+  </section>
+
+  <script>
+    var KINDS = {
+      0: ["Generalist", "even skills, stronger business pitch."],
+      1: ["Technical", "stronger programming and data, lighter design and pitch."],
+      2: ["All-rounder", "high on all four ratings."]
+    };
+
+    function kindName(id) {
+      return KINDS[id] ? KINDS[id][0] : "Cluster " + id;
+    }
+
+    function countLabel(n, singular, plural) {
+      return n + " " + (n === 1 ? singular : plural);
+    }
+
+    function renderLegend(clusters) {
+      var list = document.getElementById("kind-list");
+      list.replaceChildren();
+      clusters.forEach(function (cluster) {
+        var li = document.createElement("li");
+        var known = KINDS[cluster.cluster];
+        li.textContent = known
+          ? known[0] + ": " + known[1]
+          : "Cluster " + cluster.cluster;
+        list.append(li);
+      });
+      document.getElementById("kinds").hidden = clusters.length === 0;
+    }
+
+    function renderMix(counts, clusterIds) {
+      var mix = document.createElement("p");
+      mix.className = "mix";
+      clusterIds.forEach(function (id, index) {
+        if (index > 0) mix.append(", ");
+        var count = counts[String(id)] || 0;
+        var text = kindName(id) + " " + count;
+        if (count === 0) {
+          var zero = document.createElement("span");
+          zero.className = "zero";
+          zero.textContent = text;
+          mix.append(zero);
+        } else {
+          mix.append(text);
+        }
+      });
+      return mix;
+    }
+
+    function renderCard(group, clusterIds) {
+      var members = group.members || [];
+      var counts = group.cluster_counts || {};
+      var article = document.createElement("article");
+      var missing = clusterIds.some(function (id) {
+        return (counts[String(id)] || 0) === 0;
+      });
+      if (missing) article.className = "missing";
+
+      var heading = document.createElement("h2");
+      heading.textContent = "Group " + group.group;
+      var count = document.createElement("p");
+      count.className = "count";
+      count.textContent = countLabel(members.length, "student", "students");
+      var list = document.createElement("ul");
+      list.className = "members";
+      members.forEach(function (name) {
+        var li = document.createElement("li");
+        li.textContent = name;
+        list.append(li);
+      });
+
+      article.append(heading, count, list, renderMix(counts, clusterIds));
+      return article;
+    }
+
+    function renderBoard(data) {
+      var clusters = data.clusters || [];
+      var clusterIds = clusters.map(function (cluster) {
+        return cluster.cluster;
+      });
+      renderLegend(clusters);
+      var missing = data.groups_missing_a_cluster;
+      document.getElementById("overview").textContent =
+        countLabel(data.n_groups, "group", "groups") +
+        ". " +
+        missing +
+        " " +
+        (missing === 1 ? "is" : "are") +
+        " missing a kind of student.";
+      var cards = document.getElementById("group-cards");
+      cards.replaceChildren();
+      (data.groups || []).forEach(function (group) {
+        cards.append(renderCard(group, clusterIds));
+      });
+    }
+
+    fetch("/api/groups")
+      .then(function (response) {
+        if (!response.ok) throw new Error("Could not load groups");
+        return response.json();
+      })
+      .then(renderBoard)
+      .catch(function () {
+        document.getElementById("overview").textContent = "Groups could not be loaded.";
+      });
+  </script>
 </body>
 </html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project groups</title>
+  <style>
+    :root {
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e4dcd0;
+      --paper: #faf7f2;
+      --card: #fffdf9;
+      --missing: #9a3412;
+      --missing-bg: #f8ebe3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.45;
+    }
+
+    main {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.25rem;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+    }
+
+    header > p {
+      margin: 0.4rem 0 0;
+      color: var(--muted);
+    }
+
+    .kinds {
+      margin: 1.25rem 0 0;
+      padding: 0.9rem 1rem;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .kinds ul {
+      margin: 0.35rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    .overview {
+      margin: 1.25rem 0 0.75rem;
+    }
+
+    .groups {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 0.75rem 0.8rem 0.85rem;
+    }
+
+    article.missing {
+      background: var(--missing-bg);
+      border-color: #efd3c4;
+    }
+
+    article h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+
+    .count {
+      margin: 0.1rem 0 0.55rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .mix {
+      margin: 0.55rem 0 0;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .mix .zero {
+      color: var(--missing);
+    }
+
+    .members {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .members li {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    @media (min-width: 64rem) {
+      .groups { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Project groups</h1>
+      <p>Names sit with a group number. The mix says how many people of each kind landed in that group, not which person is which.</p>
+    </header>
+
+    <section class="kinds">
+      <p>Three kinds, from the four skill ratings (programming, data and stats, frontend design, business pitch):</p>
+      <ul>
+        <li>Generalist: even skills, stronger business pitch.</li>
+        <li>Technical: stronger programming and data, lighter design and pitch.</li>
+        <li>All-rounder: high on all four ratings.</li>
+      </ul>
+    </section>
+
+    <p class="overview">8 groups. 5 are missing a kind of student.</p>
+
+    <div class="groups">
+      <article>
+        <h2>Group 1</h2>
+        <p class="count">4 students</p>
+        <ul class="members">
+          <li>Maya Chen</li>
+          <li>Luis Ortega</li>
+          <li>Priya Shah</li>
+          <li>Owen Blake</li>
+        </ul>
+        <p class="mix">Generalist 2, Technical 1, All-rounder 1</p>
+      </article>
+
+      <article>
+        <h2>Group 2</h2>
+        <p class="count">4 students</p>
+        <ul class="members">
+          <li>Hannah Kim</li>
+          <li>Marcus Adeyemi</li>
+          <li>Sofia Rossi</li>
+          <li>Ethan Park</li>
+        </ul>
+        <p class="mix">Generalist 2, Technical 1, All-rounder 1</p>
+      </article>
+
+      <article class="missing">
+        <h2>Group 3</h2>
+        <p class="count">4 students</p>
+        <ul class="members">
+          <li>Noah Patel</li>
+          <li>Grace Liu</li>
+          <li>Jamal Wright</li>
+          <li>Clara Berg</li>
+        </ul>
+        <p class="mix">Generalist 2, Technical 2, <span class="zero">All-rounder 0</span></p>
+      </article>
+
+      <article class="missing">
+        <h2>Group 4</h2>
+        <p class="count">4 students</p>
+        <ul class="members">
+          <li>Aisha Rahman</li>
+          <li>Leo Martins</li>
+          <li>Nina Volkov</li>
+          <li>Caleb Nguyen</li>
+        </ul>
+        <p class="mix">Generalist 2, <span class="zero">Technical 0</span>, All-rounder 2</p>
+      </article>
+
+      <article>
+        <h2>Group 5</h2>
+        <p class="count">4 students</p>
+        <ul class="members">
+          <li>Iris Feldman</li>
+          <li>Andre Brooks</li>
+          <li>Mei Lin</li>
+          <li>Samir Haddad</li>
+        </ul>
+        <p class="mix">Generalist 2, Technical 1, All-rounder 1</p>
+      </article>
+
+      <article class="missing">
+        <h2>Group 6</h2>
+        <p class="count">4 students</p>
+        <ul class="members">
+          <li>Julia Costa</li>
+          <li>Theo Nakamura</li>
+          <li>Amara Diallo</li>
+          <li>Ben Carter</li>
+        </ul>
+        <p class="mix">Generalist 2, <span class="zero">Technical 0</span>, All-rounder 2</p>
+      </article>
+
+      <article class="missing">
+        <h2>Group 7</h2>
+        <p class="count">3 students</p>
+        <ul class="members">
+          <li>Leah Goldberg</li>
+          <li>Omar Farouk</li>
+          <li>Chloe Dubois</li>
+        </ul>
+        <p class="mix">Generalist 2, Technical 1, <span class="zero">All-rounder 0</span></p>
+      </article>
+
+      <article class="missing">
+        <h2>Group 8</h2>
+        <p class="count">3 students</p>
+        <ul class="members">
+          <li>Victor Lang</li>
+          <li>Noor El-Sayed</li>
+          <li>Riley Quinn</li>
+        </ul>
+        <p class="mix">Generalist 2, Technical 1, <span class="zero">All-rounder 0</span></p>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
